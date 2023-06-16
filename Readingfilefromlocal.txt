@@ -1,0 +1,24 @@
+from pyspark.sql import SparkSession
+import sys
+from datetime import datetime
+from pyspark.sql.functions import *
+from pyspark.sql.types import StructType, StructField, IntegerType, DateType, DoubleType,BooleanType, TimestampType
+import datetime
+
+spark.conf.set("spark.sql.session.timeZone", "UTC")
+ts = spark.sql("select 1.686565336E9  as co ")
+ts.printSchema()
+ts.createOrReplaceTempView("ts")
+ts.show()
+
+df = spark.sql("select  from_unixtime(co, 'yyyy-MM-dd HH:mm:ss') as c1 from ts")
+df.createOrReplaceTempView("df")
+df.show()
+
+df1 = spark.sql("select c1, cast(date_format(c1,'yyyy') as string) as YEAR,cast(date_format(c1,'MM') as string) as MONTH,                cast(date_format(c1,'dd') as string) as DAY from df")
+df1.show()
+
+
+#partitionBy() multiple columns
+#df1.write.option("header",True).partitionBy("YEAR","MONTH","DAY").mode("overwrite").parquet("dbfs:/FileStore/tables/Results/")
+
