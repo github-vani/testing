@@ -1,0 +1,97 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Mar  3 15:03:14 2018
+
+@author: sathya.srinivasan
+"""
+
+
+
+import os, time
+os.environ['TZ'] = 'Asia/Kolkata'
+
+import pytz
+tz_india = pytz.timezone('Asia/Kolkata')
+import datetime
+ 
+import shutil
+
+
+class logs():
+    
+    file_name = ""
+    def __init__(self,file_name):
+        #print("write logs")
+        self.file_name = file_name
+        file = open(self.file_name,"w+")
+        
+        file.write("log file created")
+        file.close()
+
+    
+    def write_logs_info1(self, msg):
+        file = open(self.file_name,"a")
+        print("inside function")
+        file.write("test file created")
+        print("after wrote into file")
+        file.close()
+        
+    def write_logs_info(self, msg):
+        file = open(self.file_name,"a")
+        try:
+            tmstr = datetime.datetime.now(tz_india).strftime("%Y-%m-%d %H:%M:%S")
+            if os.path.exists(self.file_name):
+                file.write("\n"+ tmstr + " - info " +" - " + msg)
+        except Exception as e:
+            print(e.args)
+            file.write("\n"+ tmstr + "- logger-error msg: " + str(e.args))
+            file.write("\n"+ tmstr +  " - " + msg)
+        file.close()
+        
+        
+    def write_logs_exception(self,msg):
+        
+        try:
+            tmstr = datetime.datetime.now(tz_india).strftime("%Y-%m-%d %H:%M:%S")
+            if os.path.exists(self.file_name):
+                               
+                file = open(self.file_name,"a+")
+                file.write("\n"+ tmstr + " - exception msg" + " - " + msg)
+        except Exception as e:
+            print(e.args)
+            file.write("\n"+ tmstr + "- logger-error msg: " + str(e.args))
+            file.write("\n"+ tmstr +  " - " + msg)
+
+        
+
+
+    def write_logs_debug(self,msg):
+        try:
+            tmstr = datetime.datetime.now(tz_india).strftime("%Y-%m-%d %H:%M:%S")
+            if os.path.exists(self.file_name):
+                               
+                file = open(self.file_name,"a+")
+                file.write("\n"+ tmstr +  " - debug -" + msg)
+        except Exception as e:
+            print(e.args)
+            file.write("\n"+ tmstr + "- logger-error msg: " + str(e.args))
+            file.write("\n"+ tmstr +  " - " + msg)
+
+        
+
+    def write_logs_error(self,msg):
+        try:
+            tmstr = datetime.datetime.now(tz_india).strftime("%Y-%m-%d %H:%M:%S")
+            if os.path.exists(self.file_name):
+                               
+                file = open(self.file_name,"a+")
+                file.write("\n"+ tmstr + " - error"+ " - " + msg)
+        except Exception as e:
+            print(e.args)
+            file.write("\n"+ tmstr + "- logger-error msg: " + str(e.args))
+            file.write("\n"+ tmstr +  " - " + msg)
+  
+  
+  
+    def move_files(self,dest_file_name):
+        shutil.move(self.file_name, dest_file_name)
